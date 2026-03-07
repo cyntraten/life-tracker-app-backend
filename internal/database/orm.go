@@ -1,4 +1,4 @@
-package lifetrackerService
+package database
 
 type Task struct {
 	ID        string `gorm:"primaryKey" json:"id"`
