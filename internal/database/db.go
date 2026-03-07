@@ -2,16 +2,17 @@ package database
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-
 var DB *gorm.DB
 
-func Connect() error {
+func InitDB() (*gorm.DB, error) {
+
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s",
 		os.Getenv("DB_HOST"),
@@ -23,9 +24,12 @@ func Connect() error {
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return err
+		log.Fatalf("Could not connect to dataase: %v", err)
 	}
 
-	DB = db
-	return nil
+	if err := Migrate(db); err != nil {
+		log.Fatalf("Could not migrate: %v", err)
+	}
+
+	return db, nil
 }
