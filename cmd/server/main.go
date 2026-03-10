@@ -3,6 +3,7 @@ package main
 import (
 	"life-tracker-app-backend/internal/database"
 	"life-tracker-app-backend/internal/handlers"
+	"life-tracker-app-backend/internal/lifetracker/moods"
 	"life-tracker-app-backend/internal/lifetracker/tasks"
 	"log"
 
@@ -28,10 +29,20 @@ func main() {
 	tasksRepo := tasks.NewTasksRepository(db)
 	tasksService := tasks.NewTasksService(tasksRepo)
 	tasksHandler := handlers.NewTasksHandler(tasksService)
+
+	moodsRepo := moods.NewMoodsRepository(db)
+	moodsService := moods.NewMoodsService(moodsRepo)
+	moodsHandler := handlers.NewMoodsHandler(moodsService)
+
 	router.GET("/tasks", tasksHandler.GetTasks)
 	router.POST("/tasks", tasksHandler.PostTasks)
 	router.DELETE("/tasks/:id", tasksHandler.DeleteTasks)
 	router.PATCH("/tasks/:id", tasksHandler.PatchTasks)
+
+	router.GET("/moods", moodsHandler.GetMoods)
+	router.POST("/moods", moodsHandler.PostMoods)
+	router.DELETE("/moods/:id", moodsHandler.DeleteMoods)
+	router.PATCH("/moods/:id", moodsHandler.PatchMoods)
 	router.Run()
 
 }
