@@ -6,6 +6,7 @@ import (
 	"life-tracker-app-backend/internal/lifetracker/habits"
 	"life-tracker-app-backend/internal/lifetracker/moods"
 	"life-tracker-app-backend/internal/lifetracker/tasks"
+	"life-tracker-app-backend/internal/routes"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -39,20 +40,13 @@ func main() {
 	habitsService := habits.NewHabitsService(habitsRepo)
 	habitsHandler := handlers.NewHabitsHandler(habitsService)
 
-	router.GET("/tasks", tasksHandler.GetTasks)
-	router.POST("/tasks", tasksHandler.PostTasks)
-	router.DELETE("/tasks/:id", tasksHandler.DeleteTasks)
-	router.PATCH("/tasks/:id", tasksHandler.PatchTasks)
+	routeHandlers := &routes.Handlers{
+		TasksHandler:  tasksHandler,
+		MoodsHandler:  moodsHandler,
+		HabitsHandler: habitsHandler,
+	}
 
-	router.GET("/moods", moodsHandler.GetMoods)
-	router.POST("/moods", moodsHandler.PostMoods)
-	router.DELETE("/moods/:id", moodsHandler.DeleteMoods)
-	router.PATCH("/moods/:id", moodsHandler.PatchMoods)
-
-	router.GET("/habits", habitsHandler.GetHabits)
-	router.POST("/habits", habitsHandler.PostHabits)
-	router.DELETE("/habits/:id", habitsHandler.DeleteHabits)
-	router.PATCH("/habits/:id", habitsHandler.PatchHabits)
+	routes.SetupRoutes(router, routeHandlers)
 	router.Run()
 
 }
