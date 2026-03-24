@@ -6,6 +6,7 @@ import (
 	"life-tracker-app-backend/internal/routes"
 	"log"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -24,6 +25,7 @@ func main() {
 
 	router := gin.Default()
 	router.SetTrustedProxies(nil)
+	router.Use(cors.Default())
 
 	handlersContainer := app.InitializeHandlers(db)
 

@@ -13,7 +13,7 @@ type Handlers struct {
 }
 
 func SetupRoutes(router *gin.Engine, handlers *Handlers) {
-	taskRoutes := router.Group("/tasks")
+	taskRoutes := router.Group("/api/tasks")
 	{
 		taskRoutes.GET("", handlers.TasksHandler.GetTasks)
 		taskRoutes.POST("", handlers.TasksHandler.PostTasks)
